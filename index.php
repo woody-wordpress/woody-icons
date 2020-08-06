@@ -1,5 +1,5 @@
 <?php
-header('X-VC-TTL: 6O');
+header('X-VC-TTL: 60');
 
 $icon_sets = [];
 foreach (glob('dist/*', GLOB_ONLYDIR) as $filename) {
