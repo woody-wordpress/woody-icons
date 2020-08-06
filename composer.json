@@ -1,0 +1,23 @@
+{
+    "name": "woody-wordpress/woody-icons",
+    "type": "wordpress-theme",
+    "version": "1.0.0",
+    "description": "Icons for Woody Wordpresss Builder",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Léo POIROUX",
+            "email": "leo@raccourci.fr"
+        },
+        {
+            "name": "Benoit BOUCHAUD",
+            "email": "benoit.bouchaud@raccourci.fr"
+        }
+    ],
+    "require": {
+        "php": "^7.3"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
