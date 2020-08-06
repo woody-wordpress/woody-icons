@@ -1,4 +1,6 @@
 <?php
+header('X-VC-TTL: 6O');
+
 $icon_sets = [];
 foreach (glob('dist/*', GLOB_ONLYDIR) as $filename) {
     $icon_sets[] = basename($filename);
