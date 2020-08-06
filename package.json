@@ -1,0 +1,23 @@
+{
+    "private": true,
+    "name": "woody-icons",
+    "title": "Icons for Woody Wordpresss Builder",
+    "author": "Raccourci Agency",
+    "scripts": {
+        "watch": "gulp watch",
+        "build": "gulp build"
+    },
+    "devDependencies": {
+        "del": "^5.1.0",
+        "gulp": "^4.0.2",
+        "gulp-iconfont": "^10.0.3",
+        "gulp-iconfont-css": "^3.0.0",
+        "gulp-autoprefixer": "^6.0.0",
+        "gulp-clean-css": "^4.0.0",
+        "gulp-rev": "^9.0.0",
+        "gulp-sass": "^4.0.2",
+        "gulp-sizereport": "^1.2.1",
+        "async-each-series": "^1.1.0",
+        "pump": "^3.0.0"
+    }
+}
