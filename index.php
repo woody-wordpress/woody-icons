@@ -13,6 +13,12 @@ if (!empty($_GET['s']) && in_array($_GET['s'], $icon_sets)) {
     $current_icon_set['key'] = current($icon_sets);
 }
 
+$assets = json_decode(file_get_contents('dist/rev-manifest.json'), true);
+$current_icon_set['stylesheet'] = $current_icon_set['key'] . '/woody-icons.css';
+if (!empty($assets) && !empty($assets[$current_icon_set['stylesheet']])) {
+    $current_icon_set['stylesheet'] = $assets[$current_icon_set['stylesheet']];
+}
+
 $current_icon_set['name'] = ucfirst(str_replace('icons_set_', '', $current_icon_set['key']));
 
 $icons = yaml_parse_file(__DIR__ . '/dist/' . $current_icon_set['key'] . '/woody-icons.yml');
@@ -29,7 +35,7 @@ $current_icon_set['icons'] = $icons;
     <title><?php echo $current_icon_set['name']; ?> | Woody Icons</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="/dist/<?php echo $current_icon_set['key']; ?>/woody-icons.css">
+    <link rel="stylesheet" href="/dist/<?php echo $current_icon_set['stylesheet']; ?>">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
 
     <style>
