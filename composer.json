@@ -1,6 +1,6 @@
 {
     "name": "woody-wordpress/woody-icons",
-    "type": "wordpress-theme",
+    "type": "library",
     "version": "1.0.0",
     "description": "Icons for Woody Wordpresss Builder",
     "license": "GPL-2.0",
@@ -13,11 +13,5 @@
             "name": "Benoit BOUCHAUD",
             "email": "benoit.bouchaud@raccourci.fr"
         }
-    ],
-    "require": {
-        "php": "^7.3"
-    },
-    "config": {
-        "optimize-autoloader": true
-    }
+    ]
 }
