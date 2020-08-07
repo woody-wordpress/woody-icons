@@ -108,14 +108,7 @@ gulp.task('css', () => {
 });
 
 gulp.task('clean', done => {
-    del.sync('./dist', {
-        force: true
-    });
-    done();
-});
-
-gulp.task('clean_watch', done => {
-    del.sync(['./dist/**/js', './dist/**/css'], {
+    del.sync('./dist/**', {
         force: true
     });
     done();
@@ -143,11 +136,7 @@ gulp.task(
     'build',
     gulp.series('clean', 'icons', 'css', 'rev', 'size')
 );
-gulp.task(
-    'build_watch',
-    gulp.series('clean_watch', 'icons', 'css', 'rev', 'size')
-);
 
 gulp.task('watch', () => {
-    gulp.watch('./icons/**/*.*', gulp.series('build_watch'));
+    gulp.watch('./icons/**/*.*', gulp.series('build'));
 });
