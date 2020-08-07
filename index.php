@@ -1,36 +1,65 @@
 <?php
-header('X-VC-TTL: 60');
+header('X-VC-TTL: 2592000');
+define('ICONS_DIST', __DIR__ . '/dist');
+
+function send503()
+{
+    header($_SERVER["SERVER_PROTOCOL"]." 503 Service Temporarily Unavailable", true, 503);
+    header('Retry-After: ' . 240);
+    exit;
+}
 
 $icon_sets = [];
-foreach (glob('dist/*', GLOB_ONLYDIR) as $filename) {
+foreach (glob(ICONS_DIST . '/*', GLOB_ONLYDIR) as $filename) {
     $icon_sets[] = basename($filename);
 }
 
-$current_icon_set = [];
-if (!empty($_GET['s']) && in_array($_GET['s'], $icon_sets)) {
-    $current_icon_set['key'] = $_GET['s'];
+if (!empty($icon_sets)) {
+    $current_icon_set = [];
+    if (!empty($_GET['s']) && in_array($_GET['s'], $icon_sets)) {
+        $current_icon_set['key'] = $_GET['s'];
+    } else {
+        $current_icon_set['key'] = current($icon_sets);
+    }
+
+    // Define Name
+    $current_icon_set['name'] = ucfirst(str_replace('icons_set_', '', $current_icon_set['key']));
+
+    $yml = ICONS_DIST . '/' . $current_icon_set['key'] . '/woody-icons.yml';
+    if (file_exists($yml)) {
+        $icons = yaml_parse_file(ICONS_DIST . '/' . $current_icon_set['key'] . '/woody-icons.yml');
+        if (!empty($icons['icons'])) {
+            $icons = $icons['icons'];
+            sort($icons);
+            $current_icon_set['icons'] = $icons;
+        } else {
+            send503();
+        }
+    } else {
+        send503();
+    }
+
+    $rev_manifest = ICONS_DIST . '/rev-manifest.json';
+    if (file_exists($rev_manifest)) {
+        $assets = json_decode(file_get_contents($rev_manifest), true);
+        $current_icon_set['stylesheet'] = $current_icon_set['key'] . '/woody-icons.css';
+        if (!empty($assets) && !empty($assets[$current_icon_set['stylesheet']])) {
+            $current_icon_set['stylesheet'] = $assets[$current_icon_set['stylesheet']];
+        } else {
+            send503();
+        }
+    } else {
+        send503();
+    }
 } else {
-    $current_icon_set['key'] = current($icon_sets);
+    send503();
 }
-
-$assets = json_decode(file_get_contents('dist/rev-manifest.json'), true);
-$current_icon_set['stylesheet'] = $current_icon_set['key'] . '/woody-icons.css';
-if (!empty($assets) && !empty($assets[$current_icon_set['stylesheet']])) {
-    $current_icon_set['stylesheet'] = $assets[$current_icon_set['stylesheet']];
-}
-
-$current_icon_set['name'] = ucfirst(str_replace('icons_set_', '', $current_icon_set['key']));
-
-$icons = yaml_parse_file(__DIR__ . '/dist/' . $current_icon_set['key'] . '/woody-icons.yml');
-$icons = $icons['icons'];
-sort($icons);
-$current_icon_set['icons'] = $icons;
 ?>
 <!doctype html>
-<html lang="en"><head>
+<html>
+    <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
     <link rel='shortcut icon' type='image/x-icon' href="favicon.ico">
     <title><?php echo $current_icon_set['name']; ?> | Woody Icons</title>
 
