@@ -2,10 +2,14 @@
 header('X-VC-TTL: 2592000');
 define('ICONS_DIST', __DIR__ . '/dist');
 
-function send503()
+function send503($error = '', $debug = [])
 {
     header($_SERVER["SERVER_PROTOCOL"]." 503 Service Temporarily Unavailable", true, 503);
     header('Retry-After: ' . 240);
+    print '<h1>' . $error . '</h1>';
+    print '<pre>';
+    print_r($debug);
+    print '</pre>';
     exit;
 }
 
@@ -33,10 +37,10 @@ if (!empty($icon_sets)) {
             sort($icons);
             $current_icon_set['icons'] = $icons;
         } else {
-            send503();
+            send503('Yml empty', ['icons' => $icons, 'current_icon_set' => $current_icon_set, 'ICONS_DIST' => $ICONS_DIST]);
         }
     } else {
-        send503();
+        send503('Yml not exist', ['yml' => $yml, 'current_icon_set' => $current_icon_set, 'ICONS_DIST' => $ICONS_DIST]);
     }
 
     $rev_manifest = ICONS_DIST . '/rev-manifest.json';
@@ -46,13 +50,13 @@ if (!empty($icon_sets)) {
         if (!empty($assets) && !empty($assets[$current_icon_set['stylesheet']])) {
             $current_icon_set['stylesheet'] = $assets[$current_icon_set['stylesheet']];
         } else {
-            send503();
+            send503('Asset not on rev-manifest', ['assets' => $assets, 'current_icon_set' => $current_icon_set, 'ICONS_DIST' => $ICONS_DIST]);
         }
     } else {
-        send503();
+        send503('rev-manifest not exist', ['rev_manifest' => $rev_manifest, 'current_icon_set' => $current_icon_set, 'ICONS_DIST' => $ICONS_DIST]);
     }
 } else {
-    send503();
+    send503('icon_sets empty', ['$icon_sets' => $icon_sets, 'ICONS_DIST' => $ICONS_DIST]);
 }
 ?>
 <!doctype html>
